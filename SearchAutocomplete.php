@@ -176,7 +176,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 $order
                 LIMIT $start, $limit;";
 
-                Utilities::putMessageLogFile($sql);
+                
 
                 $comando = $con->createCommand($sql);
                 for($i=0; $i<count($columns); $i++){
