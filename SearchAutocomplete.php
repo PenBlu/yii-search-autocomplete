@@ -18,7 +18,6 @@ class SearchAutocomplete extends \yii\base\Widget
     private static $widget_name = "SearchAutocomplete";
     public $containerId = "";
     public $url = NULL; // controller url to get data by ajax
-    public $staticData = ""; // json_encode(['status' => success|failed, 'message' => Successful request|Error Request, 'result' => ['html' => $html, 'number_of_results' => $number_of_results, 'total_pages' => $total_pages,]])
     public $token = "";
     public $max_input = 20;
     public $con = NULL;
@@ -303,7 +302,7 @@ class SearchAutocomplete extends \yii\base\Widget
     public static function verifyBotSearched($pageLoadedAt)
     {
         // if searching starts less than start time offset it seems it's a Bot
-        return (time() - $pageLoadedAt < Config::getConfig('searchStartTimeOffset')) ? false : true;
+        return (time() - $pageLoadedAt < 2) ? false : true;
     }
 
     public function registerTranslations()
