@@ -57,10 +57,6 @@ class SearchAutocomplete extends \yii\base\Widget
             $vars .= "url: '" . $this->url . "',
             ";
         }
-        if($this->staticData != ""){
-            $vars .= "staticdata: " . $this->staticData . ",
-            ";
-        }
         $script =
         "
         jQuery('#". $id ."').ajaxlivesearch({
