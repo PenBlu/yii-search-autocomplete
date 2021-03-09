@@ -51,7 +51,8 @@
             slide_speed: "fast",
             type_delay: 350,
             max_input: 20,
-            min_chars_to_search: 0
+            min_chars_to_search: 0,
+            fncallback: ""
         };
 
         ls = $.extend(ls, options);

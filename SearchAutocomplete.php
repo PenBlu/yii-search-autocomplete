@@ -26,6 +26,8 @@ class SearchAutocomplete extends \yii\base\Widget
     public $table = "";
     public $where = "";
     public $order = "";
+    public $callback = NULL;
+    public $colDefault = 0;
     public $limit = 20;
     public $htmlOptions = [];
 
@@ -53,9 +55,15 @@ class SearchAutocomplete extends \yii\base\Widget
 
     public function registerClientScript($id) {
         $vars = "";
+        $fncall = "";
         if(isset($this->url)){
             $vars .= "url: '" . $this->url . "',
             ";
+        }
+        if(isset($this->callback)){
+            $vars .= "fncallback: '" . $this->callback . "',
+            ";
+            $fncall = $this->callback . "(arr);";
         }
         $script =
         "
@@ -66,13 +74,18 @@ class SearchAutocomplete extends \yii\base\Widget
             " . $vars . "
             onResultClick: function(e, data) {
                 // get the index 0 (first column) value
-                var selectedOne = jQuery(data.selected).find('td').eq('0').text();
-    
+                var selectedOne = jQuery(data.selected).find('td').eq('".$this->colDefault."').text();
+                let arr = new Array();
+                var objSelect = jQuery(data.selected).find('td').each(function() {
+                    arr.push($(this).text());
+                });
                 // set the input value
                 jQuery('#". $id ."').val(selectedOne);
     
                 // hide the result
                 jQuery('#". $id ."').trigger('ajaxlivesearch:hide_result');
+                
+                ".$fncall."
             },
             onResultEnter: function(e, data) {
                 // do whatever you want
@@ -172,8 +185,6 @@ class SearchAutocomplete extends \yii\base\Widget
                 $order
                 LIMIT $start, $limit;";
 
-                
-
                 $comando = $con->createCommand($sql);
                 for($i=0; $i<count($columns); $i++){
                     $comando->bindParam(":".$columns[$i], $search_cond, \PDO::PARAM_STR);
@@ -205,6 +216,7 @@ class SearchAutocomplete extends \yii\base\Widget
      * @param   mixed $con   DB Conection. Example: Yii::$app->db
      * @param   mixed $columns  Columns to Select query to search. Example: ['c_id', 'c_name', 'c_value']
      * @param   mixed $aliasCols    Alias Columns to Select query to search. Example: ['id', 'name', 'value']
+     * @param   mixed $colsVisible    Columns to show query to search. Example: ['id', 'name', 'value']
      * @param   string $table   Table Name to search data. Example: "Country"
      * @param   string $where   Query where to filter data. Example: "estado = 1 AND logic = 1"
      * @param   string $order   Query order to order data. Exmplae: "id DESC, value ASC"
@@ -215,7 +227,7 @@ class SearchAutocomplete extends \yii\base\Widget
      * @return array
      * @throws \Exception
      */
-    public static function renderView($search, $con, $columns, $aliasCols, $table, $where = NULL, $order = NULL, $limitPage = 20, $currentPage, $perPage)
+    public static function renderView($search, $con, $columns, $aliasCols, $colsVisible, $table, $where = NULL, $order = NULL, $limitPage = 20, $currentPage, $perPage)
     {
         $result = self::getData($search, $con, $columns, $aliasCols, $table, $where, $order, $limitPage, $currentPage, $perPage);
         $response = [];
@@ -228,6 +240,7 @@ class SearchAutocomplete extends \yii\base\Widget
             $html = \Yii::$app->view->renderFile(Yii::getAlias('@vendor') . "/penblu/" . strtolower(self::$widget_name) . "/views/default.php", [
                 "query" => $search,
                 "headers" => $headers,
+                "colsVisible" => $colsVisible,
                 "rows" => $rows,
                 "noResult" => self::t('autocomplete','There is no result for'),
             ]);

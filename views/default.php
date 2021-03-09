@@ -5,10 +5,15 @@ $html = '';
 /**
  * Header
  */
+$arr_pos = [];
 if (!empty($headers)) {
     $html .= '<tr>';
-    foreach ($headers as $aHeader) {
-        $html .= "<th>$aHeader</th>";
+    for ($i = 0; $i < count($headers); $i++) {
+        if(array_search($headers[$i], $colsVisible) !== FALSE){
+            $html .= "<th>".$headers[$i]."</th>";
+            $arr_pos[] = $i;
+        }else   
+            $html .= "<th style='display: none;'>".$headers[$i]."</th>"; 
     }
     $html .= '</tr>';
 }
@@ -19,21 +24,24 @@ if (!empty($headers)) {
 if (!empty($rows)) {
     foreach ($rows as $row) {
         $html .= '<tr>';
+        $i = 0;
         foreach ($row as $columnName => $column) {
+            $cssClass = "";
+            if(array_search($i, $arr_pos) === FALSE){
+                $cssClass = "style='display: none;'";
+            }
             if (is_array($column)) {
                 $content = '';
                 foreach ($column as $aColumnKey => $aColumnValue) {
                     $content .= "$aColumnKey : $aColumnValue ";
                 }
-
                 $content = htmlspecialchars($content);
-
-                $html .= "<td>$content</td>";
+                $html .= "<td ".$cssClass." class='ccl'>$content</td>";
             } else {
                 $column = htmlspecialchars($column);
-
-                $html .= "<td>$column</td>";
+                $html .= "<td ".$cssClass." class='ccd'>$column</td>";
             }
+            $i++;
         }
         $html .= '</tr>';
     }

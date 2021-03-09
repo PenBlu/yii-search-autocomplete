@@ -54,6 +54,7 @@ class SearchAutocompleteAsset extends AssetBundle {
     ];
     public $js = [
         'js/ajaxlivesearch.min.js',
+        //'js/ajaxlivesearch.js',
     ];
     public $depends = [
         'yii\web\JqueryAsset',
