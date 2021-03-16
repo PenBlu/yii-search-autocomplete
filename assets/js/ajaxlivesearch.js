@@ -423,9 +423,10 @@
             query.on('click', function(event) {
                 // If enter key is pressed check if the user wants to select hovered row
                 var keycode = event.keyCode || event.which;
-                if (query.val() == "") {
+                if (query.val() == "" || query.attr('data-value') != "") {
                     search(this, form, ls, false, true, true);
                     show_result(result, ls);
+                    query.attr('data-value', '');
                 }
             });
             // Trigger search when typing is started

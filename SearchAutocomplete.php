@@ -29,6 +29,7 @@ class SearchAutocomplete extends \yii\base\Widget
     public $callback = NULL;
     public $colDefault = 0;
     public $limit = 20;
+    public $defaultValue = "";
     public $htmlOptions = [];
 
 
@@ -45,9 +46,11 @@ class SearchAutocomplete extends \yii\base\Widget
         $this->containerId = $this->htmlOptions['id'];
         $this->htmlOptions['class'] = (isset($this->htmlOptions['class']))?($this->htmlOptions['class'] . " pb-src-autocomplete form-control"):"pb-src-autocomplete form-control";
         $this->htmlOptions['placeholder'] = self::t('autocomplete','Type to search ...');
+        $this->htmlOptions['data-value'] = $this->defaultValue;
         echo $this->render('index', [
             "id" => $this->htmlOptions['id'],
             "htmlOptions" => $this->htmlOptions,
+            "defaultValue" => $this->defaultValue,
         ]);
         $this->registerClientScript($this->containerId);
         parent::run();

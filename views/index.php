@@ -47,6 +47,6 @@ use yii\helpers\Html;
 
 ?>
 
-<?= Html::input('text', $id, '', $htmlOptions) ?>
+<?= Html::input('text', $id, $defaultValue, $htmlOptions) ?>
 
 
