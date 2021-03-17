@@ -144,7 +144,7 @@ class SearchAutocomplete extends \yii\base\Widget
                     FROM 
                         ".$con->dbname.".".$table."
                     WHERE 
-                        $str_search
+                        ($str_search)
                         $where
                     $order;";
 
@@ -183,7 +183,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 FROM 
                     ".$con->dbname.".".$table."
                 WHERE 
-                    $str_search
+                    ($str_search)
                     $where
                 $order
                 LIMIT $start, $limit;";
