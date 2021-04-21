@@ -128,14 +128,16 @@ class SearchAutocomplete extends \yii\base\Widget
             $limit = $limitPage;
             $where = (isset($where))?" AND $where":"";
             $order = (isset($order))?" ORDER BY $order ":"";
+            $paramLbl = "param";
 
             for($i=0; $i<count($columns); $i++){
+                $param = $paramLbl . $i;
                 if(($i + 1) == count($columns)){
                     $cols .= $columns[$i] . " AS " . $aliasCols[$i];
-                    $str_search .= $columns[$i] . " LIKE :".$columns[$i]." ";
+                    $str_search .= $columns[$i] . " LIKE :".$param." ";
                 }else{
                     $cols .= $columns[$i] . " AS " . $aliasCols[$i] . ", ";
-                    $str_search .= $columns[$i] . " LIKE :".$columns[$i]." OR ";
+                    $str_search .= $columns[$i] . " LIKE :".$param." OR ";
                 }
             }
 
@@ -147,11 +149,13 @@ class SearchAutocomplete extends \yii\base\Widget
                         ($str_search)
                         $where
                     $order;";
-
+            
             $comando = $con->createCommand($sql);
             for($i=0; $i<count($columns); $i++){
-                $comando->bindParam(":".$columns[$i], $search_cond, \PDO::PARAM_STR);
+                $param = $paramLbl . $i;
+                $comando->bindParam(":".$param, $search_cond, \PDO::PARAM_STR);
             }
+            //Utilities::putMessageLogFile($comando->getRawSql());
             $result = $comando->queryOne();
             $resultNumber = (int) $result['CANT'];
 
@@ -187,13 +191,14 @@ class SearchAutocomplete extends \yii\base\Widget
                     $where
                 $order
                 LIMIT $start, $limit;";
-
+                
                 $comando = $con->createCommand($sql);
                 for($i=0; $i<count($columns); $i++){
-                    $comando->bindParam(":".$columns[$i], $search_cond, \PDO::PARAM_STR);
+                    $comando->bindParam(":".$param, $search_cond, \PDO::PARAM_STR);
                 }
+                Utilities::putMessageLogFile($comando->getRawSql());
                 $rows = $comando->queryAll();
-
+                
                 // if requested, generate column headers
                 $headers = $aliasCols;
 
@@ -210,6 +215,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 'total_pages'       => $pagesNumber,
             ];
         }catch(Exception $ex){
+            Utilities::putMessageLogFile($ex->getMessage());
             return NULL;
         }
     }
