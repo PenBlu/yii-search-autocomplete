@@ -2,7 +2,6 @@
 
 namespace app\vendor\penblu\searchautocomplete;
 
-use app\models\Utilities;
 use Yii;
 use app\vendor\penblu\searchautocomplete\SearchAutocompleteAsset;
 use Exception;
@@ -196,7 +195,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 for($i=0; $i<count($columns); $i++){
                     $comando->bindParam(":".$param, $search_cond, \PDO::PARAM_STR);
                 }
-                Utilities::putMessageLogFile($comando->getRawSql());
+                //Utilities::putMessageLogFile($comando->getRawSql());
                 $rows = $comando->queryAll();
                 
                 // if requested, generate column headers
@@ -215,7 +214,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 'total_pages'       => $pagesNumber,
             ];
         }catch(Exception $ex){
-            Utilities::putMessageLogFile($ex->getMessage());
+            //Utilities::putMessageLogFile($ex->getMessage());
             return NULL;
         }
     }
