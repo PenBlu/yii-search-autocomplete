@@ -193,6 +193,7 @@ class SearchAutocomplete extends \yii\base\Widget
                 
                 $comando = $con->createCommand($sql);
                 for($i=0; $i<count($columns); $i++){
+                    $param = $paramLbl . $i;
                     $comando->bindParam(":".$param, $search_cond, \PDO::PARAM_STR);
                 }
                 //Utilities::putMessageLogFile($comando->getRawSql());
