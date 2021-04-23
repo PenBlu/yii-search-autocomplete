@@ -428,6 +428,7 @@
                     show_result(result, ls);
                     query.attr('data-value', '');
                 }
+                result.css({ left: query.position().left + 1, width: query.outerWidth() - 2 });
             });
             // Trigger search when typing is started
             query.on('keyup', function(event) {
