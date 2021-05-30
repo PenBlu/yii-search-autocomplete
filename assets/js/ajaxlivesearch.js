@@ -52,7 +52,8 @@
             type_delay: 350,
             max_input: 20,
             min_chars_to_search: 0,
-            fncallback: ""
+            fncallback: "",
+            fnaddparams: ""
         };
 
         ls = $.extend(ls, options);
@@ -221,6 +222,17 @@
 
                                 toPostData.push(dataObj);
                             });
+
+                            if (options.fnaddparams != "") {
+                                var fnc = options.fnaddparams;
+                                var objarr = window[fnc]();
+                                $.each(objarr, function(k, v) {
+                                    var dataObj = {};
+                                    dataObj['name'] = k;
+                                    dataObj['value'] = v;
+                                    toPostData.push(dataObj);
+                                });
+                            }
 
                             // Send the request
                             $.ajax({

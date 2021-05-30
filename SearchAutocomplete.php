@@ -26,6 +26,7 @@ class SearchAutocomplete extends \yii\base\Widget
     public $where = "";
     public $order = "";
     public $callback = NULL;
+    public $addParamsRequest = NULL;
     public $colDefault = 0;
     public $limit = 20;
     public $defaultValue = "";
@@ -66,6 +67,10 @@ class SearchAutocomplete extends \yii\base\Widget
             $vars .= "fncallback: '" . $this->callback . "',
             ";
             $fncall = $this->callback . "(arr);";
+        }
+        if(isset($this->addParamsRequest)){
+            $vars .= "fnaddparams: '" . $this->addParamsRequest . "',
+            ";
         }
         $script =
         "
